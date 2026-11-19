@@ -1,0 +1,45 @@
+# AI言及チェッカーの設定。config/target.yaml にコピーして書き換える。
+# Gemini の無料枠に送った内容は Google の製品改善に使われるので、公開情報だけを書くこと。
+
+target:
+  name: 株式会社サンプル          # 正式な会社名
+  aliases: [サンプル, Sample]     # 略称・英語名・サービス名 (表記ゆれは自動で吸収: 全角半角・法人格・空白)
+  ambiguous_aliases: []           # 同じ名前の別物がありそうな別名。これだけで見つかった回答は「要確認」
+  domains: [sample.co.jp]         # 公式サイトのドメイン (自社サイトの引用率に使う)
+  industry: 税理士事務所
+  region: 東京
+  notes: 創業支援・中小企業向け   # 質問を作るときのヒント (任意)
+
+questions:
+  count: 20
+  file: config/questions.yaml     # ①で作った質問の保存先。人が直して使い回す
+
+ask:
+  # 調べ先 (並べた順にレポートに出る)
+  #   本物の画面から取り込む (人がコピー、0円):
+  #     google_ai_mode (Google AIモード) / google_ai_overview (AIによる概要) /
+  #     chatgpt (ChatGPT 検索) / perplexity / gemini_app (gemini.google.com)
+  #   Gemini API (自動):
+  #     plain (検索なし) / grounded (検索あり。新しいキーの無料枠では使えない、2026-11 時点)
+  modes: [google_ai_mode, chatgpt, plain]
+  repeats: 1                      # 同じ質問を何回聞くか
+
+extract:
+  modes: all                      # 回数が足りないときは [chatgpt, google_ai_mode] のように絞る
+
+# モデル名は無料枠の条件に合わせて変える (README の「無料枠について」)
+models:
+  questions: gemini-3.5-flash
+  grounded: gemini-3.8-flash
+  plain: gemini-3.8-flash         # 検索ありと同じモデルにすると、検索の有無だけを比べられる
+  extract: gemini-3.5-flash-lite
+
+# AI Studio の「Rate limit」画面で確認した、自分のプロジェクトの上限を書く
+limits:
+  default: {rpm: 5, rpd: 20}      # 書いていないモデルに使う値 (控えめ)
+  gemini-3.8-flash: {rpm: 5, rpd: 20}
+  gemini-3.5-flash: {rpm: 5, rpd: 20}
+  gemini-3.5-flash-lite: {rpm: 10, rpd: 100}
+  grounding_rpd: 500              # 検索ありの1日の上限
+  retries: 3
+  backoff_seconds: 15

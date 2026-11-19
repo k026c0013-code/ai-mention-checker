@@ -1,0 +1,5 @@
+google-genai==3.6.1
+PyYAML==6.0.3
+python-dotenv==1.2.4
+tzdata==2026.6   # Windows でタイムゾーン (太平洋時間) を扱うため
+pytest==9.2.0

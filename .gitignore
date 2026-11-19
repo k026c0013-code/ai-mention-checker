@@ -1,0 +1,17 @@
+# secrets (N-07)
+.env
+.env.*
+!.env.example
+
+# results
+runs/
+
+# python
+.venv/
+__pycache__/
+*.py[cod]
+.pytest_cache/
+
+# 対象ごとの設定と質問 (手元だけに置く。例は config/target.example.yaml)
+config/target.yaml
+config/questions.yaml
